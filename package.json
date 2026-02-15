@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "db:reset": "npx prisma migrate reset",
     "db:generate": "npx prisma generate",
     "db:seed": "npx prisma db seed",
     "generate": "graphql-codegen --config codegen.yml",
