@@ -24,7 +24,7 @@ model Employee {
   id          String  @id @default(uuid())
   user        User?   @relation("UserEmployee", fields: [userId], references: [id])
   userId      String? @unique
-  fullname    String?
+  fullname    String
   contactInfo String?
   unitId      String
   unit        Unit    @relation(fields: [unitId], references: [id])

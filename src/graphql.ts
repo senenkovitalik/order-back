@@ -22,16 +22,39 @@ export type AuthData = {
   token: Scalars['String']['output'];
 };
 
+export type CreateEmployeeInput = {
+  contactInfo?: InputMaybe<Scalars['String']['input']>;
+  fullname: Scalars['String']['input'];
+  unitId: Scalars['ID']['input'];
+  userId?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type CreateUnitInput = {
   location?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
 };
 
+export type Employee = {
+  __typename?: 'Employee';
+  contactInfo?: Maybe<Scalars['String']['output']>;
+  fullname: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  unit: Unit;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createEmployee: Employee;
   createUnit: Unit;
+  deleteEmployee: Employee;
   deleteUnit: Unit;
+  updateEmployee: Employee;
   updateUnit: Unit;
+};
+
+
+export type MutationCreateEmployeeArgs = {
+  employeePayload: CreateEmployeeInput;
 };
 
 
@@ -40,8 +63,18 @@ export type MutationCreateUnitArgs = {
 };
 
 
+export type MutationDeleteEmployeeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
 export type MutationDeleteUnitArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationUpdateEmployeeArgs = {
+  employeePayload: UpdateEmployeeInput;
 };
 
 
@@ -51,8 +84,15 @@ export type MutationUpdateUnitArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  employee?: Maybe<Employee>;
+  employees: Array<Employee>;
   login: AuthData;
   units: Array<Unit>;
+};
+
+
+export type QueryEmployeeArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -68,10 +108,25 @@ export type Unit = {
   title: Scalars['String']['output'];
 };
 
+export type UpdateEmployeeInput = {
+  contactInfo?: InputMaybe<Scalars['String']['input']>;
+  fullname?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  unitId?: InputMaybe<Scalars['ID']['input']>;
+  userId?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type UpdateUnitInput = {
   id: Scalars['ID']['input'];
   location?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type User = {
+  __typename?: 'User';
+  employee?: Maybe<Employee>;
+  id: Scalars['ID']['output'];
+  username: Scalars['String']['output'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -150,39 +205,59 @@ export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = 
 export type ResolversTypes = ResolversObject<{
   AuthData: ResolverTypeWrapper<AuthData>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  CreateEmployeeInput: CreateEmployeeInput;
   CreateUnitInput: CreateUnitInput;
+  Employee: ResolverTypeWrapper<Employee>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Unit: ResolverTypeWrapper<Unit>;
+  UpdateEmployeeInput: UpdateEmployeeInput;
   UpdateUnitInput: UpdateUnitInput;
+  User: ResolverTypeWrapper<User>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   AuthData: AuthData;
   Boolean: Scalars['Boolean']['output'];
+  CreateEmployeeInput: CreateEmployeeInput;
   CreateUnitInput: CreateUnitInput;
+  Employee: Employee;
   ID: Scalars['ID']['output'];
   Mutation: Record<PropertyKey, never>;
   Query: Record<PropertyKey, never>;
   String: Scalars['String']['output'];
   Unit: Unit;
+  UpdateEmployeeInput: UpdateEmployeeInput;
   UpdateUnitInput: UpdateUnitInput;
+  User: User;
 }>;
 
 export type AuthDataResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['AuthData'] = ResolversParentTypes['AuthData']> = ResolversObject<{
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 }>;
 
+export type EmployeeResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Employee'] = ResolversParentTypes['Employee']> = ResolversObject<{
+  contactInfo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  fullname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  unit?: Resolver<ResolversTypes['Unit'], ParentType, ContextType>;
+}>;
+
 export type MutationResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  createEmployee?: Resolver<ResolversTypes['Employee'], ParentType, ContextType, RequireFields<MutationCreateEmployeeArgs, 'employeePayload'>>;
   createUnit?: Resolver<ResolversTypes['Unit'], ParentType, ContextType, RequireFields<MutationCreateUnitArgs, 'unitPayload'>>;
+  deleteEmployee?: Resolver<ResolversTypes['Employee'], ParentType, ContextType, RequireFields<MutationDeleteEmployeeArgs, 'id'>>;
   deleteUnit?: Resolver<ResolversTypes['Unit'], ParentType, ContextType, RequireFields<MutationDeleteUnitArgs, 'id'>>;
+  updateEmployee?: Resolver<ResolversTypes['Employee'], ParentType, ContextType, RequireFields<MutationUpdateEmployeeArgs, 'employeePayload'>>;
   updateUnit?: Resolver<ResolversTypes['Unit'], ParentType, ContextType, RequireFields<MutationUpdateUnitArgs, 'unitPayload'>>;
 }>;
 
 export type QueryResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  employee?: Resolver<Maybe<ResolversTypes['Employee']>, ParentType, ContextType, RequireFields<QueryEmployeeArgs, 'id'>>;
+  employees?: Resolver<Array<ResolversTypes['Employee']>, ParentType, ContextType>;
   login?: Resolver<ResolversTypes['AuthData'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'password' | 'username'>>;
   units?: Resolver<Array<ResolversTypes['Unit']>, ParentType, ContextType>;
 }>;
@@ -193,10 +268,18 @@ export type UnitResolvers<ContextType = MyContext, ParentType extends ResolversP
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 }>;
 
+export type UserResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+  employee?: Resolver<Maybe<ResolversTypes['Employee']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = MyContext> = ResolversObject<{
   AuthData?: AuthDataResolvers<ContextType>;
+  Employee?: EmployeeResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Unit?: UnitResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
 }>;
 

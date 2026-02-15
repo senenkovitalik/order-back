@@ -1,17 +1,24 @@
 type Query {
   login(username: String!, password: String!): AuthData!
   units: [Unit!]!
+  employees: [Employee!]!
+  employee(id: ID!): Employee
 }
 
 type Mutation {
   createUnit(unitPayload: CreateUnitInput!): Unit!
   updateUnit(unitPayload: UpdateUnitInput!): Unit!
   deleteUnit(id: ID!): Unit!
+  createEmployee(employeePayload: CreateEmployeeInput!): Employee!
+  updateEmployee(employeePayload: UpdateEmployeeInput!): Employee!
+  deleteEmployee(id: ID!): Employee!
 }
 
 type AuthData {
   token: String!
 }
+
+# Unit
 
 input CreateUnitInput {
   title: String!
@@ -28,4 +35,28 @@ type Unit {
   id: ID!
   title: String!
   location: String
+}
+
+# Employee
+
+input CreateEmployeeInput {
+  fullname: String!
+  contactInfo: String
+  userId: ID
+  unitId: ID!
+}
+
+input UpdateEmployeeInput {
+  id: ID!
+  fullname: String
+  contactInfo: String
+  userId: ID
+  unitId: ID
+}
+
+type Employee {
+  id: ID!
+  fullname: String!
+  contactInfo: String
+  unit: Unit!
 }
