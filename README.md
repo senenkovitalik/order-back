@@ -1,10 +1,12 @@
-# Node.js template
+# Project Name
 
-This is a Node.js project.
+GraphQL API for managing units and employees.
+Built with Node.js, TypeScript, Apollo Server and Prisma.
 
-Add your [configuration](https://codesandbox.io/docs/projects/learn/setting-up/tasks) to optimize it for [CodeSandbox](https://codesandbox.io/p/dashboard).
+## Tech Stack
 
-## Resources
-
-- [CodeSandbox — Docs](https://codesandbox.io/docs/learn)
-- [CodeSandbox — Discord](https://discord.gg/Ggarp3pX5H)
+- Node.js
+- TypeScript
+- Apollo Server
+- Prisma ORM
+- PostgreSQL
