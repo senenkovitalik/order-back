@@ -1,17 +1,26 @@
 type Query {
   login(username: String!, password: String!): AuthData!
   units: [Unit!]!
+  unit(id: ID!): Unit
   employees: [Employee!]!
   employee(id: ID!): Employee
+  devices: [Device!]!
+  device(id: ID!): Device
 }
 
 type Mutation {
+  # unit
   createUnit(unitPayload: CreateUnitInput!): Unit!
   updateUnit(unitPayload: UpdateUnitInput!): Unit!
   deleteUnit(id: ID!): Unit!
+  # employee
   createEmployee(employeePayload: CreateEmployeeInput!): Employee!
   updateEmployee(employeePayload: UpdateEmployeeInput!): Employee!
   deleteEmployee(id: ID!): Employee!
+  # device
+  createDevice(devicePayload: CreateDeviceInput!): Device!
+  updateDevice(devicePayload: UpdateDeviceInput!): Device!
+  deleteDevice(id: ID!): Device!
 }
 
 type AuthData {
@@ -59,4 +68,32 @@ type Employee {
   fullname: String!
   contactInfo: String
   unit: Unit!
+}
+
+# Device
+
+type Device {
+  id: ID!
+  manufacturer: String!
+  model: String!
+  os: String!
+  serialNumber: String!
+  employee: Employee!
+}
+
+input CreateDeviceInput {
+  manufacturer: String!
+  model: String!
+  os: String!
+  serialNumber: String!
+  employeeId: ID!
+}
+
+input UpdateDeviceInput {
+  id: ID!
+  manufacturer: String
+  model: String
+  os: String
+  serialNumber: String
+  employeeId: ID
 }

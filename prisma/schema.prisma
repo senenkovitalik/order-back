@@ -14,25 +14,36 @@ datasource db {
 }
 
 model User {
-  id        String  @id   @default(uuid())
-  username  String  @unique
-  password  String
-  employee  Employee? @relation("UserEmployee")
+  id       String    @id @default(uuid())
+  username String    @unique
+  password String
+  employee Employee? @relation("UserEmployee")
 }
 
 model Employee {
-  id          String  @id @default(uuid())
-  user        User?   @relation("UserEmployee", fields: [userId], references: [id])
-  userId      String? @unique
+  id          String   @id @default(uuid())
+  user        User?    @relation("UserEmployee", fields: [userId], references: [id])
+  userId      String?  @unique
   fullname    String
   contactInfo String?
   unitId      String
-  unit        Unit    @relation(fields: [unitId], references: [id])
+  unit        Unit     @relation(fields: [unitId], references: [id])
+  device      Device[]
 }
 
 model Unit {
-  id        String @id @default(uuid())
-  title     String @unique
-  location  String?
-  employee  Employee[]
+  id       String     @id @default(uuid())
+  title    String     @unique
+  location String?
+  employee Employee[]
+}
+
+model Device {
+  id           String   @id @default(uuid())
+  manufacturer String
+  model        String
+  os           String
+  serialNumber String   @unique
+  employeeId   String
+  employee     Employee @relation(fields: [employeeId], references: [id])
 }
