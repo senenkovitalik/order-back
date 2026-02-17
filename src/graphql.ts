@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { Unit, Employee, Device } from '@prisma/client';
+import { Unit, Employee, Device, VpnProfile, VpnProfileType } from '@prisma/client';
 import { MyContext } from '../types';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -43,6 +43,17 @@ export type CreateUnitInput = {
   title: Scalars['String']['input'];
 };
 
+export type CreateVpnProfileInput = {
+  ipAddress: Scalars['String']['input'];
+  profileCode: Scalars['String']['input'];
+  profileTypeId: Scalars['ID']['input'];
+};
+
+export type CreateVpnProfileTypeInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+};
+
 export type Device = {
   __typename?: 'Device';
   employee: Employee;
@@ -51,6 +62,7 @@ export type Device = {
   model: Scalars['String']['output'];
   os: Scalars['String']['output'];
   serialNumber: Scalars['String']['output'];
+  vpnProfile?: Maybe<VpnProfile>;
 };
 
 export type Employee = {
@@ -63,15 +75,36 @@ export type Employee = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  assignVpnProfileToDevice: Device;
+  changeVpnProfileType: VpnProfile;
   createDevice: Device;
   createEmployee: Employee;
   createUnit: Unit;
+  createVpnProfile: VpnProfile;
+  createVpnProfileType: VpnProfileType;
   deleteDevice: Device;
   deleteEmployee: Employee;
   deleteUnit: Unit;
+  deleteVpnProfile: VpnProfile;
+  deleteVpnProfileType: VpnProfileType;
+  unassignVpnProfileFromDevice: Device;
   updateDevice: Device;
   updateEmployee: Employee;
   updateUnit: Unit;
+  updateVpnProfile: VpnProfile;
+  updateVpnProfileType: VpnProfileType;
+};
+
+
+export type MutationAssignVpnProfileToDeviceArgs = {
+  deviceId: Scalars['ID']['input'];
+  vpnProfileId: Scalars['ID']['input'];
+};
+
+
+export type MutationChangeVpnProfileTypeArgs = {
+  newTypeId: Scalars['ID']['input'];
+  vpnProfileId: Scalars['ID']['input'];
 };
 
 
@@ -90,6 +123,16 @@ export type MutationCreateUnitArgs = {
 };
 
 
+export type MutationCreateVpnProfileArgs = {
+  vpnProfilePayload: CreateVpnProfileInput;
+};
+
+
+export type MutationCreateVpnProfileTypeArgs = {
+  vpnProfileTypePayload: CreateVpnProfileTypeInput;
+};
+
+
 export type MutationDeleteDeviceArgs = {
   id: Scalars['ID']['input'];
 };
@@ -102,6 +145,21 @@ export type MutationDeleteEmployeeArgs = {
 
 export type MutationDeleteUnitArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteVpnProfileArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteVpnProfileTypeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationUnassignVpnProfileFromDeviceArgs = {
+  deviceId: Scalars['ID']['input'];
 };
 
 
@@ -119,6 +177,16 @@ export type MutationUpdateUnitArgs = {
   unitPayload: UpdateUnitInput;
 };
 
+
+export type MutationUpdateVpnProfileArgs = {
+  vpnProfilePayload: UpdateVpnProfileInput;
+};
+
+
+export type MutationUpdateVpnProfileTypeArgs = {
+  vpnProfileTypePayload: UpdateVpnProfileTypeInput;
+};
+
 export type Query = {
   __typename?: 'Query';
   device?: Maybe<Device>;
@@ -128,6 +196,10 @@ export type Query = {
   login: AuthData;
   unit?: Maybe<Unit>;
   units: Array<Unit>;
+  vpnProfile?: Maybe<VpnProfile>;
+  vpnProfileType?: Maybe<VpnProfileType>;
+  vpnProfileTypes: Array<VpnProfileType>;
+  vpnProfiles: Array<VpnProfile>;
 };
 
 
@@ -148,6 +220,16 @@ export type QueryLoginArgs = {
 
 
 export type QueryUnitArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryVpnProfileArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryVpnProfileTypeArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -179,6 +261,35 @@ export type UpdateUnitInput = {
   id: Scalars['ID']['input'];
   location?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateVpnProfileInput = {
+  id: Scalars['ID']['input'];
+  ipAddress?: InputMaybe<Scalars['String']['input']>;
+  profileCode?: InputMaybe<Scalars['String']['input']>;
+  profileTypeId?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type UpdateVpnProfileTypeInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type VpnProfile = {
+  __typename?: 'VpnProfile';
+  device?: Maybe<Device>;
+  id: Scalars['ID']['output'];
+  ipAddress: Scalars['String']['output'];
+  profileCode: Scalars['String']['output'];
+  profileType: VpnProfileType;
+};
+
+export type VpnProfileType = {
+  __typename?: 'VpnProfileType';
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -260,6 +371,8 @@ export type ResolversTypes = ResolversObject<{
   CreateDeviceInput: CreateDeviceInput;
   CreateEmployeeInput: CreateEmployeeInput;
   CreateUnitInput: CreateUnitInput;
+  CreateVpnProfileInput: CreateVpnProfileInput;
+  CreateVpnProfileTypeInput: CreateVpnProfileTypeInput;
   Device: ResolverTypeWrapper<Device>;
   Employee: ResolverTypeWrapper<Employee>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
@@ -270,6 +383,10 @@ export type ResolversTypes = ResolversObject<{
   UpdateDeviceInput: UpdateDeviceInput;
   UpdateEmployeeInput: UpdateEmployeeInput;
   UpdateUnitInput: UpdateUnitInput;
+  UpdateVpnProfileInput: UpdateVpnProfileInput;
+  UpdateVpnProfileTypeInput: UpdateVpnProfileTypeInput;
+  VpnProfile: ResolverTypeWrapper<VpnProfile>;
+  VpnProfileType: ResolverTypeWrapper<VpnProfileType>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -279,6 +396,8 @@ export type ResolversParentTypes = ResolversObject<{
   CreateDeviceInput: CreateDeviceInput;
   CreateEmployeeInput: CreateEmployeeInput;
   CreateUnitInput: CreateUnitInput;
+  CreateVpnProfileInput: CreateVpnProfileInput;
+  CreateVpnProfileTypeInput: CreateVpnProfileTypeInput;
   Device: Device;
   Employee: Employee;
   ID: Scalars['ID']['output'];
@@ -289,6 +408,10 @@ export type ResolversParentTypes = ResolversObject<{
   UpdateDeviceInput: UpdateDeviceInput;
   UpdateEmployeeInput: UpdateEmployeeInput;
   UpdateUnitInput: UpdateUnitInput;
+  UpdateVpnProfileInput: UpdateVpnProfileInput;
+  UpdateVpnProfileTypeInput: UpdateVpnProfileTypeInput;
+  VpnProfile: VpnProfile;
+  VpnProfileType: VpnProfileType;
 }>;
 
 export type AuthDataResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['AuthData'] = ResolversParentTypes['AuthData']> = ResolversObject<{
@@ -302,6 +425,7 @@ export type DeviceResolvers<ContextType = MyContext, ParentType extends Resolver
   model?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   os?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   serialNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  vpnProfile?: Resolver<Maybe<ResolversTypes['VpnProfile']>, ParentType, ContextType>;
 }>;
 
 export type EmployeeResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Employee'] = ResolversParentTypes['Employee']> = ResolversObject<{
@@ -312,15 +436,24 @@ export type EmployeeResolvers<ContextType = MyContext, ParentType extends Resolv
 }>;
 
 export type MutationResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  assignVpnProfileToDevice?: Resolver<ResolversTypes['Device'], ParentType, ContextType, RequireFields<MutationAssignVpnProfileToDeviceArgs, 'deviceId' | 'vpnProfileId'>>;
+  changeVpnProfileType?: Resolver<ResolversTypes['VpnProfile'], ParentType, ContextType, RequireFields<MutationChangeVpnProfileTypeArgs, 'newTypeId' | 'vpnProfileId'>>;
   createDevice?: Resolver<ResolversTypes['Device'], ParentType, ContextType, RequireFields<MutationCreateDeviceArgs, 'devicePayload'>>;
   createEmployee?: Resolver<ResolversTypes['Employee'], ParentType, ContextType, RequireFields<MutationCreateEmployeeArgs, 'employeePayload'>>;
   createUnit?: Resolver<ResolversTypes['Unit'], ParentType, ContextType, RequireFields<MutationCreateUnitArgs, 'unitPayload'>>;
+  createVpnProfile?: Resolver<ResolversTypes['VpnProfile'], ParentType, ContextType, RequireFields<MutationCreateVpnProfileArgs, 'vpnProfilePayload'>>;
+  createVpnProfileType?: Resolver<ResolversTypes['VpnProfileType'], ParentType, ContextType, RequireFields<MutationCreateVpnProfileTypeArgs, 'vpnProfileTypePayload'>>;
   deleteDevice?: Resolver<ResolversTypes['Device'], ParentType, ContextType, RequireFields<MutationDeleteDeviceArgs, 'id'>>;
   deleteEmployee?: Resolver<ResolversTypes['Employee'], ParentType, ContextType, RequireFields<MutationDeleteEmployeeArgs, 'id'>>;
   deleteUnit?: Resolver<ResolversTypes['Unit'], ParentType, ContextType, RequireFields<MutationDeleteUnitArgs, 'id'>>;
+  deleteVpnProfile?: Resolver<ResolversTypes['VpnProfile'], ParentType, ContextType, RequireFields<MutationDeleteVpnProfileArgs, 'id'>>;
+  deleteVpnProfileType?: Resolver<ResolversTypes['VpnProfileType'], ParentType, ContextType, RequireFields<MutationDeleteVpnProfileTypeArgs, 'id'>>;
+  unassignVpnProfileFromDevice?: Resolver<ResolversTypes['Device'], ParentType, ContextType, RequireFields<MutationUnassignVpnProfileFromDeviceArgs, 'deviceId'>>;
   updateDevice?: Resolver<ResolversTypes['Device'], ParentType, ContextType, RequireFields<MutationUpdateDeviceArgs, 'devicePayload'>>;
   updateEmployee?: Resolver<ResolversTypes['Employee'], ParentType, ContextType, RequireFields<MutationUpdateEmployeeArgs, 'employeePayload'>>;
   updateUnit?: Resolver<ResolversTypes['Unit'], ParentType, ContextType, RequireFields<MutationUpdateUnitArgs, 'unitPayload'>>;
+  updateVpnProfile?: Resolver<ResolversTypes['VpnProfile'], ParentType, ContextType, RequireFields<MutationUpdateVpnProfileArgs, 'vpnProfilePayload'>>;
+  updateVpnProfileType?: Resolver<ResolversTypes['VpnProfileType'], ParentType, ContextType, RequireFields<MutationUpdateVpnProfileTypeArgs, 'vpnProfileTypePayload'>>;
 }>;
 
 export type QueryResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -331,12 +464,30 @@ export type QueryResolvers<ContextType = MyContext, ParentType extends Resolvers
   login?: Resolver<ResolversTypes['AuthData'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'password' | 'username'>>;
   unit?: Resolver<Maybe<ResolversTypes['Unit']>, ParentType, ContextType, RequireFields<QueryUnitArgs, 'id'>>;
   units?: Resolver<Array<ResolversTypes['Unit']>, ParentType, ContextType>;
+  vpnProfile?: Resolver<Maybe<ResolversTypes['VpnProfile']>, ParentType, ContextType, RequireFields<QueryVpnProfileArgs, 'id'>>;
+  vpnProfileType?: Resolver<Maybe<ResolversTypes['VpnProfileType']>, ParentType, ContextType, RequireFields<QueryVpnProfileTypeArgs, 'id'>>;
+  vpnProfileTypes?: Resolver<Array<ResolversTypes['VpnProfileType']>, ParentType, ContextType>;
+  vpnProfiles?: Resolver<Array<ResolversTypes['VpnProfile']>, ParentType, ContextType>;
 }>;
 
 export type UnitResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Unit'] = ResolversParentTypes['Unit']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   location?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+}>;
+
+export type VpnProfileResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['VpnProfile'] = ResolversParentTypes['VpnProfile']> = ResolversObject<{
+  device?: Resolver<Maybe<ResolversTypes['Device']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  ipAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  profileCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  profileType?: Resolver<ResolversTypes['VpnProfileType'], ParentType, ContextType>;
+}>;
+
+export type VpnProfileTypeResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['VpnProfileType'] = ResolversParentTypes['VpnProfileType']> = ResolversObject<{
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = MyContext> = ResolversObject<{
@@ -346,5 +497,7 @@ export type Resolvers<ContextType = MyContext> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Unit?: UnitResolvers<ContextType>;
+  VpnProfile?: VpnProfileResolvers<ContextType>;
+  VpnProfileType?: VpnProfileTypeResolvers<ContextType>;
 }>;
 

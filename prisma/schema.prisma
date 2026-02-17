@@ -38,12 +38,30 @@ model Unit {
   employee Employee[]
 }
 
+model VpnProfileType {
+  id          String       @id @default(uuid())
+  name        String       @unique
+  description String?
+  profiles    VpnProfile[]
+}
+
+model VpnProfile {
+  id            String         @id @default(uuid())
+  profileCode   String         @unique
+  ipAddress     String
+  profileTypeId String
+  profileType   VpnProfileType @relation(fields: [profileTypeId], references: [id])
+  device        Device?
+}
+
 model Device {
-  id           String   @id @default(uuid())
+  id           String      @id @default(uuid())
   manufacturer String
   model        String
   os           String
-  serialNumber String   @unique
+  serialNumber String      @unique
   employeeId   String
-  employee     Employee @relation(fields: [employeeId], references: [id])
+  employee     Employee    @relation(fields: [employeeId], references: [id])
+  vpnProfileId String?     @unique
+  vpnProfile   VpnProfile? @relation(fields: [vpnProfileId], references: [id])
 }

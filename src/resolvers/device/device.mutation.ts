@@ -49,14 +49,34 @@ export const deviceMutation: MutationResolvers = {
       return await prisma.device.delete({ where: { id } })
     } catch (e: any) {
       if (e.code === 'P2003') {
-        throw new GraphQLError(
-          'Cannot delete device with existing assignments. Remove or reassign devices first.',
-          {
-            extensions: { code: 'BAD_USER_INPUT' },
-          }
-        )
+        throw new GraphQLError('Cannot delete device with existing assignments. Remove or reassign devices first.', {
+          extensions: { code: 'BAD_USER_INPUT' },
+        })
       }
       throw e
     }
+  },
+  assignVpnProfileToDevice: async (_, { deviceId, vpnProfileId }) => {
+    try {
+      return await prisma.device.update({
+        where: { id: deviceId },
+        data: {
+          vpnProfile: { connect: { id: vpnProfileId } },
+        },
+      })
+    } catch (e: any) {
+      if (e.code === 'P2002') {
+        throw new GraphQLError('This VPN profile is already assigned to another device', {
+          extensions: { code: 'BAD_USER_INPUT' },
+        })
+      }
+      throw e
+    }
+  },
+  unassignVpnProfileFromDevice: async (_, { deviceId }) => {
+    return await prisma.device.update({
+      where: { id: deviceId },
+      data: { vpnProfile: { disconnect: true } },
+    })
   },
 }

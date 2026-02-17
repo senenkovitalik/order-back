@@ -12,3 +12,5 @@ generates:
         Unit: "@prisma/client#Unit"
         Employee: "@prisma/client#Employee"
         Device: "@prisma/client#Device"
+        VpnProfile: "@prisma/client#VpnProfile"
+        VpnProfileType: "@prisma/client#VpnProfileType"

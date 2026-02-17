@@ -1,6 +1,7 @@
 import { prisma } from '../src/lib/prismaClient.js'
 
 async function main() {
+  // units
   const unitA = await prisma.unit.upsert({
     where: {
       title: 'A0000',
@@ -23,6 +24,7 @@ async function main() {
     },
   })
 
+  //  users
   const userA = await prisma.user.upsert({
     where: {
       username: 'james.hetfield',
@@ -45,6 +47,7 @@ async function main() {
     },
   })
 
+  // emplyees
   const employeeA = await prisma.employee.upsert({
     where: {
       id: 'efbd0d08-c180-4bd1-9a2d-a098b7d3ad12',
@@ -72,6 +75,7 @@ async function main() {
     },
   })
 
+  // devices
   const deviceA = await prisma.device.upsert({
     where: {
       serialNumber: 'SN123456789',
@@ -113,6 +117,122 @@ async function main() {
       employeeId: employeeA.id,
     },
   })
+
+  // vpn profile types
+  const vpnProfileTypeA = await prisma.vpnProfileType.upsert({
+    where: {
+      name: 'A',
+    },
+    update: {},
+    create: {
+      name: 'A',
+      description: 'Connect devices to network A',
+    },
+  })
+
+  const vpnProfileTypeB = await prisma.vpnProfileType.upsert({
+    where: {
+      name: 'B',
+    },
+    update: {},
+    create: {
+      name: 'B',
+      description: 'Connect devices to network B',
+    },
+  })
+
+  const vpnProfileTypeC = await prisma.vpnProfileType.upsert({
+    where: {
+      name: 'C',
+    },
+    update: {},
+    create: {
+      name: 'C',
+      description: 'Connect devices to network C',
+    },
+  })
+
+  //  vpn profiles
+  const vpmProfileA = await prisma.vpnProfile.upsert({
+    where: {
+      profileCode: 'A1702202601',
+    },
+    update: {},
+    create: {
+      profileCode: 'A1702202601',
+      ipAddress: '192.168.1.1',
+      profileTypeId: vpnProfileTypeA.id,
+    },
+  })
+
+  const vpmProfileB = await prisma.vpnProfile.upsert({
+    where: {
+      profileCode: 'B1702202602',
+    },
+    update: {},
+    create: {
+      profileCode: 'B1702202602',
+      ipAddress: '192.168.1.2',
+      profileTypeId: vpnProfileTypeB.id,
+    },
+  })
+
+  const vpmProfileC = await prisma.vpnProfile.upsert({
+    where: {
+      profileCode: 'C1702202603',
+    },
+    update: {},
+    create: {
+      profileCode: 'C1702202603',
+      ipAddress: '192.168.1.3',
+      profileTypeId: vpnProfileTypeC.id,
+    },
+  })
+
+  const vpnProfileD = await prisma.vpnProfile.upsert({
+    where: {
+      profileCode: 'A1702202604',
+    },
+    update: {},
+    create: {
+      profileCode: 'A1702202604',
+      ipAddress: '192.168.1.4',
+      profileTypeId: vpnProfileTypeA.id,
+    },
+  })
+
+  const vpnProfileE = await prisma.vpnProfile.upsert({
+    where: {
+      profileCode: 'B1702202605',
+    },
+    update: {},
+    create: {
+      profileCode: 'B1702202605',
+      ipAddress: '192.168.1.5',
+      profileTypeId: vpnProfileTypeB.id,
+    },
+  })
+
+  const vpnProfileF = await prisma.vpnProfile.upsert({
+    where: {
+      profileCode: 'C1702202606',
+    },
+    update: {},
+    create: {
+      profileCode: 'C1702202606',
+      ipAddress: '192.168.1.6',
+      profileTypeId: vpnProfileTypeC.id,
+    },
+  })
+
+  await prisma.device.update({
+    where: {
+      id: deviceA.id,
+    },
+    data: {
+      vpnProfileId: vpmProfileA.id,
+    },
+  });
 }
 
 main()

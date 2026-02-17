@@ -6,6 +6,10 @@ type Query {
   employee(id: ID!): Employee
   devices: [Device!]!
   device(id: ID!): Device
+  vpnProfiles: [VpnProfile!]!
+  vpnProfile(id: ID!): VpnProfile
+  vpnProfileTypes: [VpnProfileType!]!
+  vpnProfileType(id: ID!): VpnProfileType
 }
 
 type Mutation {
@@ -21,6 +25,17 @@ type Mutation {
   createDevice(devicePayload: CreateDeviceInput!): Device!
   updateDevice(devicePayload: UpdateDeviceInput!): Device!
   deleteDevice(id: ID!): Device!
+  assignVpnProfileToDevice(deviceId: ID!, vpnProfileId: ID!): Device!
+  unassignVpnProfileFromDevice(deviceId: ID!): Device!
+  # vpn profile
+  createVpnProfile(vpnProfilePayload: CreateVpnProfileInput!): VpnProfile!
+  updateVpnProfile(vpnProfilePayload: UpdateVpnProfileInput!): VpnProfile!
+  deleteVpnProfile(id: ID!): VpnProfile!
+  changeVpnProfileType(vpnProfileId: ID!, newTypeId: ID!): VpnProfile!
+  # vpn profile type
+  createVpnProfileType(vpnProfileTypePayload: CreateVpnProfileTypeInput!): VpnProfileType!
+  updateVpnProfileType(vpnProfileTypePayload: UpdateVpnProfileTypeInput!): VpnProfileType!
+  deleteVpnProfileType(id: ID!): VpnProfileType!
 }
 
 type AuthData {
@@ -79,6 +94,7 @@ type Device {
   os: String!
   serialNumber: String!
   employee: Employee!
+  vpnProfile: VpnProfile
 }
 
 input CreateDeviceInput {
@@ -96,4 +112,50 @@ input UpdateDeviceInput {
   os: String
   serialNumber: String
   employeeId: ID
+}
+
+# VPN Profile
+type VpnProfile {
+  id: ID!
+  profileCode: String!
+  ipAddress: String!
+  profileType: VpnProfileType!
+  device: Device
+}
+
+type VpnProfileType {
+  id: ID!
+  name: String!
+  description: String
+}
+
+input CreateVpnProfileInput {
+  profileCode: String!
+  ipAddress: String!
+  profileTypeId: ID!
+}
+
+input UpdateVpnProfileInput {
+  id: ID!
+  profileCode: String
+  ipAddress: String
+  profileTypeId: ID
+}
+
+# VPN Profile Type
+type VpnProfileType {
+  id: ID!
+  name: String!
+  description: String
+}
+
+input CreateVpnProfileTypeInput {
+  name: String!
+  description: String
+}
+
+input UpdateVpnProfileTypeInput {
+  id: ID!
+  name: String
+  description: String
 }

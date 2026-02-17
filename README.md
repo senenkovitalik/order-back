@@ -10,3 +10,8 @@ Built with Node.js, TypeScript, Apollo Server and Prisma.
 - Apollo Server
 - Prisma ORM
 - PostgreSQL
+
+## Prisma
+
+Create migration
+`npx prisma migrate dev --name init`
