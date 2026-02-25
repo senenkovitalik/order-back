@@ -43,7 +43,7 @@ async function main() {
     update: {},
     create: {
       username: 'user',
-      password: 'somestrongpassword',
+      password: 'password',
     },
   })
 
