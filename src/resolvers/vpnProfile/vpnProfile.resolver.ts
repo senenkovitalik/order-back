@@ -7,6 +7,9 @@ const vpnProfileResolver: VpnProfileResolvers = {
   profileType: async (parent) => {
     return await prisma.vpnProfileType.findUnique({ where: { id: parent.profileTypeId } })
   },
+  device: async (parent) => {
+    return await prisma.device.findUnique({ where: { vpnProfileId: parent.id } })
+  }
 }
 
 export const vpnProfileResolvers = {
